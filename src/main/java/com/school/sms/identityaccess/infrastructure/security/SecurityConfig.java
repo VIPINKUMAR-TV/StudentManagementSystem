@@ -34,10 +34,13 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()       // Login open
-                .requestMatchers("/students/**").hasRole("ADMIN")
-                .requestMatchers("/profile/**").hasRole("STUDENT")
-                .anyRequest().authenticated()
+                    .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/actuator/health/**").permitAll()   // Health open for Render checks
+                    .requestMatchers("/actuator/info").permitAll()
+                    .requestMatchers("/actuator/metrics/**").hasRole("ADMIN") // metrics secured
+                    .requestMatchers("/students/**").hasRole("ADMIN")
+                    .requestMatchers("/profile/**").hasRole("STUDENT")
+                    .anyRequest().authenticated()
             )
 
             // Add JWT filter before Spring login filter
